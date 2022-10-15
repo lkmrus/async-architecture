@@ -21,23 +21,31 @@ app.get(
 )
 app.post(
   '/tasks',
-  { preHandler: [auth.authZ], onResponse: [(request, reply) => publish(EXCHANGES.CUD_EVENTS, EVENTS.TASK_CREATED, { data: reply.request.body, userId: reply.request.user?.id, })], },
+  {
+    preHandler: [auth.authZ],
+    onResponse: [(request, reply) => publish(EXCHANGES.CUD_EVENTS, EVENTS.TASK_CREATED, { data: reply.request.body, userId: reply.request.user?.id, })],
+  },
   TaskController.createTask
 )
 app.patch(
   '/tasks/assign',
-  { preHandler: [auth.authZ], onResponse: [ (req, reply) => {
-    publish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED, {
-      data: reply.request.body,
-      userId: reply.request.user?.id,
-    })
-  }], },
+  {
+    preHandler: [auth.authZ], onResponse: [ (req, reply) => {
+      publish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED, {
+        data: reply.request.body,
+        userId: reply.request.user?.id,
+      })
+    }],
+  },
   TaskController.assignTask
 )
 app.patch(
   '/tasks/complete',
-  { preHandler: [auth.authZ], onResponse: [(req, reply) => publish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_COMPLETED, { data: reply.request.body,
-    userId: reply.request.user?.id, })], },
+  {
+    preHandler: [auth.authZ],
+    onResponse: [(req, reply) => publish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_COMPLETED, { data: reply.request.body,
+      userId: reply.request.user?.id, })],
+  },
   TaskController.completeTask
 )
 
