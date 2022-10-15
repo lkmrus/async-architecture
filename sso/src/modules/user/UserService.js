@@ -2,7 +2,7 @@ import { db, } from 'Config'
 import { makeHash, } from 'Utils/makeHash'
 
 export default class UserService {
-  getUsers({ limit, offset, }) {
+  static getUsers({ limit, offset, }) {
     return db.user.findAll({
       limit: limit ?? 100,
       offset: offset ?? 0,
@@ -11,13 +11,13 @@ export default class UserService {
     })
   }
 
-  async updatePassword(userId, password) {
+  static async updatePassword(userId, password) {
     const hash = await makeHash(password)
     await db.user.update({ password: hash, }, { where: { id: userId, }, })
     return true
   }
 
-  async updateProfile(userId, data) {
+  static async updateProfile(userId, data) {
     await db.user.update(data, { where: { id: userId, }, })
     return true
   }

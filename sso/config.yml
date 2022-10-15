@@ -9,6 +9,9 @@ db:
   name: aa_sso
   user: postgres
   pass: postgres
-  timeout: 10000
 
-rabbitConnectionUrl: 'amqp://localhost'
+# rabbitConnectionUrl: 'amqp://localhost'
+# For bullmq
+bull:
+  redisUrl: ''
+  prefix: 'bullmq'

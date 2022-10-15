@@ -1,4 +1,4 @@
-## SSO
+## Task tracker
 
 ### Requirements
 * Node v16+

@@ -4,6 +4,6 @@ import db from './db'
 
 export {
   db,
-  constants,
   dbConf,
+  constants,
 }

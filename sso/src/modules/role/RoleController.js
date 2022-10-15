@@ -1,7 +1,7 @@
-import { RoleService, } from 'Config/singletones'
+import RoleService from './RoleService'
 
-export class RoleController extends RoleService {
-  assignRole({ body, params, }) {
-    return super.changeRole(params.id, body.role)
+export default class RoleController {
+  static assignRole({ body, params, }) {
+    return RoleService.changeRole(params.id, body.role)
   }
 }

@@ -1,15 +1,15 @@
-import { UserService, } from 'Config/singletones'
+import UserService from './UserService'
 
-export class UserController extends UserService {
-  getUsers({ query, }) {
-    return super.getUsers(query)
+export default class UserController {
+  static getUsers({ query, }) {
+    return UserService.getUsers(query)
   }
 
-  changePassword({ body, user, }) {
-    return super.updatePassword(user.id, body.password)
+  static changePassword({ body, user, }) {
+    return UserService.updatePassword(user.id, body.password)
   }
 
-  changeProfile({ body, params, }) {
-    return super.updateProfile(params.id, body)
+  static changeProfile({ body, params, }) {
+    return UserService.updateProfile(params.id, body)
   }
 }

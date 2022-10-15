@@ -4,7 +4,7 @@ import { issueJWT, pluckAuthToken, verifyJWT, } from './utils/authentication'
 import { AuthError, } from 'Exceptions'
 
 export default class AuthService {
-  async verify(token) {
+  static async verify(token) {
     const jwtToken = pluckAuthToken(token)
     if (!jwtToken) {
       return {
@@ -32,7 +32,7 @@ export default class AuthService {
     return {}
   }
 
-  async signIn(login, password) {
+  static async signIn(login, password) {
     const hash = await makeHash(password)
 
     const user = await db.user.findOne({ where: { login, }, })
@@ -49,7 +49,7 @@ export default class AuthService {
     })
   }
 
-  async signUp(data) {
+  static async signUp(data) {
     data.password = await makeHash(data.password)
     return db.user.create(data)
   }

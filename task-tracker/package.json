@@ -1,5 +1,5 @@
 {
-  "name": "sso",
+  "name": "task-tracker",
   "version": "1.0.0",
   "main": "dist/app",
   "scripts": {
