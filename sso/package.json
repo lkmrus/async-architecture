@@ -1,0 +1,49 @@
+{
+  "name": "sso",
+  "version": "1.0.0",
+  "main": "dist/app",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "start": "npm run prebuild && npm run build && node ./dist/app",
+    "start:dev": "NODE_ENV=development nodemon --exec babel-node -- ./src/app",
+    "build": "NODE_ENV=production babel src --out-dir dist",
+    "migration:new": "npx sequelize-cli migration:generate --name",
+    "migrate:run": "npm run build && npx sequelize-cli db:migrate",
+    "migrate:undo": "npm run build && npx sequelize-cli db:migrate:undo",
+    "seed": "npm run build && npx sequelize-cli db:seed:all",
+    "seed:undo": "npm run build && npx sequelize-cli db:seed:undo"
+  },
+  "dependencies": {
+    "ajv": "^6.12.6",
+    "amqplib": "^0.10.3",
+    "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "fast-jwt": "^1.7.1",
+    "fastify": "^3.14.2",
+    "fastify-cors": "^6.0.1",
+    "lodash": "^4.17.21",
+    "merge-deep": "^3.0.3",
+    "pg": "^8.8.0",
+    "pino": "^6.11.3",
+    "sequelize": "^6.23.2",
+    "yaml": "^2.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.19.0",
+    "@babel/eslint-parser": "^7.18.9",
+    "@babel/node": "^7.13.13",
+    "@babel/plugin-proposal-export-default-from": "^7.12.13",
+    "@babel/plugin-syntax-json-strings": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "babel-preset-latest-node": "^5.5.1",
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.7",
+    "pino-pretty": "^4.7.1",
+    "rimraf": "^3.0.2",
+    "sequelize-cli": "^6.5.1"
+  }
+}

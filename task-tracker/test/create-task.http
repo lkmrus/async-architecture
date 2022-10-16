@@ -1,0 +1,9 @@
+POST http://localhost:3101/tasks
+Content-Type: application/json
+Accept: application/json
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1NzI4ODkwLCJleHAiOjE2NjU4MTUyOTB9.M5eVnZaBTk9MMLWW6gb-lwFnVOOKy12z_k_1UPM7WNw
+
+{
+  "userId": "1",
+  "title": "Отправить отчетность в налоговую"
+}

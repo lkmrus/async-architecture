@@ -1,3 +1,7 @@
+*/dist
+*/node_modules
+*/package-lock.json
+*/.idea
+*/.vscode
 .idea
-node_modules
-.env
+.vscode

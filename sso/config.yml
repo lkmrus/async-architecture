@@ -1,0 +1,17 @@
+app:
+  port: 3100
+  host: 0.0.0.0
+  logLevel: info
+
+db:
+  host: localhost
+  port: 5432
+  name: aa_sso
+  user: postgres
+  pass: postgres
+
+# rabbitConnectionUrl: 'amqp://localhost'
+# For bullmq
+bull:
+  redisUrl: ''
+  prefix: 'bullmq'

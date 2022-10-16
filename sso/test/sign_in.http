@@ -1,0 +1,8 @@
+POST http://localhost:3100/auth/sign_in
+Content-Type: application/json
+Accept: application/json
+
+{
+  "login": "admin",
+  "password": "123456"
+}
