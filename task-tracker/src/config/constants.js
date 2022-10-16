@@ -27,11 +27,6 @@ export const SERVICES = {
   AUTH_URL: yaml.services?.authUrl,
 }
 
-export const BULL = {
-  REDIS_URL: yaml.bull.redisUrl,
-  PREFIX: yaml.bull.prefix,
-}
-
 export default {
   NODE_ENV,
   CLIENT_TYPES,

@@ -14,8 +14,3 @@ services:
   authUrl: 0.0.0.0:3100
 
 rabbitConnectionUrl: 'amqp://localhost'
-
-# For bullmq
-# bull:
-#  redisUrl: ''
-#  prefix: 'bullmq'
