@@ -10,8 +10,4 @@ db:
   user: postgres
   pass: postgres
 
-# rabbitConnectionUrl: 'amqp://localhost'
-# For bullmq
-bull:
-  redisUrl: ''
-  prefix: 'bullmq'
+rabbitConnectionUrl: 'amqp://localhost'

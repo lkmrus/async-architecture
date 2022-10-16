@@ -11,6 +11,19 @@ if (constants.NODE_ENV !== 'production') {
   fastifyOptions.logger = logger
 }
 
+const responsePublish = (exchange, routingKey, additionalData = {}) => {
+  return async (_req, reply, payload, done) => {
+    await publish(exchange, routingKey, {
+      ...additionalData,
+      userId: reply.request?.user?.id,
+      request: reply.request.body,
+      response: payload,
+      date: new Date(),
+    })
+    done()
+  }
+}
+
 const app = Fastify(fastifyOptions)
 app.register(fastifyCors)
 
@@ -23,19 +36,15 @@ app.post(
   '/tasks',
   {
     preHandler: [auth.authZ],
-    onResponse: [(request, reply) => publish(EXCHANGES.CUD_EVENTS, EVENTS.TASK_CREATED, { data: reply.request.body, userId: reply.request.user?.id, })],
+    onSend: [responsePublish(EXCHANGES.CUD_EVENTS, EVENTS.TASK_CREATED)],
   },
   TaskController.createTask
 )
 app.patch(
   '/tasks/assign',
   {
-    preHandler: [auth.authZ], onResponse: [ (req, reply) => {
-      publish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED, {
-        data: reply.request.body,
-        userId: reply.request.user?.id,
-      })
-    }],
+    preHandler: [auth.authZ],
+    // onSend: [ responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
   },
   TaskController.assignTask
 )
@@ -43,8 +52,7 @@ app.patch(
   '/tasks/complete',
   {
     preHandler: [auth.authZ],
-    onResponse: [(req, reply) => publish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_COMPLETED, { data: reply.request.body,
-      userId: reply.request.user?.id, })],
+    onSend: [responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_COMPLETED)],
   },
   TaskController.completeTask
 )
