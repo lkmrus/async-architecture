@@ -15,11 +15,15 @@ if (constants.NODE_ENV !== 'production') {
 
 const responsePublish = (exchange, routingKey, additionalData = {}) => {
   return async (_req, reply, payload) => {
+    const userId = !reply.request.user ? JSON.parse(payload)?.id : reply.request.user?.id
+    const publicId = !reply.request.user ? JSON.parse(payload)?.publicId : reply.request.user?.publicId
+
     await publish(exchange, routingKey, {
       ...additionalData,
-      userId: reply.request.user?.id,
+      userId,
+      publicId,
       request: reply.request.body,
-      response: payload,
+      response: JSON.parse(payload),
       date: new Date(),
     })
   }
@@ -28,7 +32,9 @@ const responsePublish = (exchange, routingKey, additionalData = {}) => {
 const app = Fastify(fastifyOptions)
 app.register(fastifyCors)
 
-app.get('/users', { preHandler: [AuthController.getContext, AuthController.checkAdminRole], }, UserController.getUsers)
+app.get('/users',
+  { preHandler: [AuthController.getContext, AuthController.checkAdminRole], },
+  UserController.getUsers)
 app.post('/users/change_password', { preHandler: [AuthController.getContext], }, UserController.changePassword)
 app.post('/users/change_profile/:id', { onResponse: [], }, UserController.changeProfile)
 

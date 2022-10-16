@@ -12,12 +12,12 @@ if (constants.NODE_ENV !== 'production') {
 }
 
 const responsePublish = (exchange, routingKey, additionalData = {}) => {
-  return async (req, reply, payload, done) => {
+  return async (req, reply, payload) => {
     await publish(exchange, routingKey, {
       ...additionalData,
       userId: reply.request?.user?.id,
       request: reply.request.body,
-      response: payload,
+      response: JSON.parse(payload),
       date: new Date(),
     })
   }

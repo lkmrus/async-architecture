@@ -1,25 +1,22 @@
 import { Model, } from 'sequelize'
 
 export default (sequelize, dataTypes) => {
-  class Task extends Model {}
+  class User extends Model {}
 
-  Task.init({
+  User.init({
     id: {
       autoIncrement: true,
       primaryKey: true,
       type: dataTypes.BIGINT,
     },
     userId: dataTypes.BIGINT,
-    title: dataTypes.STRING,
-    status: dataTypes.STRING,
-    order: dataTypes.INTEGER,
-    completedAt: dataTypes.DATE,
+    publicId: dataTypes.UUID,
   }, {
     sequelize,
-    modelName: 'task',
+    modelName: 'user',
     paranoid: true,
     updatedAt: false,
   })
 
-  return Task
+  return User
 }

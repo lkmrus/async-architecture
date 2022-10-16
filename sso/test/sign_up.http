@@ -2,8 +2,9 @@ POST http://localhost:3100/auth/sign_up
 Content-Type: application/json
 Accept: application/json
 
+# Login like a email
 {
   "name": "Ruslan",
-  "login": "lkmrus@gmail.com",
+  "login": "admin1@test.ru",
   "password": "123456"
 }
