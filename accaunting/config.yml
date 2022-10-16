@@ -1,0 +1,16 @@
+app:
+  port: 3102
+  host: 0.0.0.0
+  logLevel: info
+
+db:
+  host: localhost
+  port: 5432
+  name: aa_accounting
+  user: postgres
+  pass: postgres
+
+services:
+  authUrl: 0.0.0.0:3100
+
+rabbitConnectionUrl: 'amqp://localhost'

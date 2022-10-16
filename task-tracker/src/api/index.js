@@ -35,6 +35,7 @@ app.post(
   '/tasks',
   {
     preHandler: [auth.authZ],
+    // TODO Создавать транзакцию для возможности отмены сохранения если событие не отправится
     onSend: [responsePublish(EXCHANGES.CUD_EVENTS, EVENTS.TASK_CREATED)],
   },
   TaskController.createTask
@@ -43,6 +44,7 @@ app.patch(
   '/tasks/assign',
   {
     preHandler: [auth.authZ],
+    // TODO Создавать транзакцию для возможности отмены сохранения если событие не отправится
     onSend: [ responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
   },
   TaskController.assignTask
@@ -51,6 +53,7 @@ app.patch(
   '/tasks/complete',
   {
     preHandler: [auth.authZ],
+    // TODO Создавать транзакцию для возможности отмены сохранения если событие не отправится
     onSend: [responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_COMPLETED)],
   },
   TaskController.completeTask
