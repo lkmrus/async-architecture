@@ -12,7 +12,7 @@ if (constants.NODE_ENV !== 'production') {
 }
 
 const responsePublish = (exchange, routingKey, additionalData = {}) => {
-  return async (_req, reply, payload, done) => {
+  return async (req, reply, payload, done) => {
     await publish(exchange, routingKey, {
       ...additionalData,
       userId: reply.request?.user?.id,
@@ -20,7 +20,6 @@ const responsePublish = (exchange, routingKey, additionalData = {}) => {
       response: payload,
       date: new Date(),
     })
-    done()
   }
 }
 
@@ -44,7 +43,7 @@ app.patch(
   '/tasks/assign',
   {
     preHandler: [auth.authZ],
-    // onSend: [ responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
+    onSend: [ responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
   },
   TaskController.assignTask
 )

@@ -14,7 +14,7 @@ if (constants.NODE_ENV !== 'production') {
 }
 
 const responsePublish = (exchange, routingKey, additionalData = {}) => {
-  return async (_req, reply, payload, done) => {
+  return async (_req, reply, payload) => {
     await publish(exchange, routingKey, {
       ...additionalData,
       userId: reply.request.user?.id,
@@ -22,7 +22,6 @@ const responsePublish = (exchange, routingKey, additionalData = {}) => {
       response: payload,
       date: new Date(),
     })
-    done()
   }
 }
 
@@ -38,7 +37,7 @@ app.post('/roles/assign_role/:id', { preHandler: [AuthController.getContext, Aut
 app.get('/auth/check', { preHandler: [AuthController.getContext], }, AuthController.checkUser)
 app.post('/auth/sign_in', AuthController.signIn)
 app.post('/auth/sign_up',{
-  onSend: [responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.USER_REGISTERED)],
+  onSend: [responsePublish(EXCHANGES.CUD_EVENTS, EVENTS.USER_REGISTERED)],
 }, AuthController.signUp)
 
 app.setNotFoundHandler((req, res) => {
