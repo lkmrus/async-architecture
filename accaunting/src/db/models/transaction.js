@@ -1,24 +1,24 @@
 import { Model, } from 'sequelize'
 
 export default (sequelize, dataTypes) => {
-  class Bill extends Model {}
+  class Transaction extends Model {}
 
-  Bill.init({
+  Transaction.init({
     id: {
       autoIncrement: true,
       primaryKey: true,
       type: dataTypes.BIGINT,
     },
     bill: dataTypes.UUID,
-    debit: dataTypes.FLOAT,
+    deposit: dataTypes.FLOAT,
     credit: dataTypes.FLOAT,
   }, {
     sequelize,
-    modelName: 'user',
+    modelName: 'transaction',
     paranoid: true,
     createdAt: 'date',
     updatedAt: false,
   })
 
-  return Bill
+  return Transaction
 }

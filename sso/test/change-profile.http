@@ -1,7 +1,7 @@
 POST http://localhost:3100/users/change_profile/1
 Content-Type: application/json
 Accept: application/json
-Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY0ODczMzg0LCJleHAiOjE2NjQ5NTk3ODR9.Py4fMvnqiSzVeIKXN1M7_3o-yAkdBAbRYA4ORwreCYU
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2NjYzNzU2NzEsImV4cCI6MTY2NjQ2MjA3MX0.xa9eEAIj0Twsf9WLTZTGHdPtLeiz0obtyDI9rmU_L74
 
 
 {

@@ -13,11 +13,15 @@ if (constants.NODE_ENV !== 'production') {
 
 const responsePublish = (exchange, routingKey, additionalData = {}) => {
   return async (req, reply, payload) => {
+    const response = JSON.parse(payload)
+    if (response?.error) {
+      return
+    }
     await publish(exchange, routingKey, {
       ...additionalData,
       userId: reply.request?.user?.id,
       request: reply.request.body,
-      response: JSON.parse(payload),
+      response,
       date: new Date(),
     })
   }
@@ -36,6 +40,7 @@ app.post(
   {
     preHandler: [auth.authZ],
     // TODO Создавать транзакцию для возможности отмены сохранения если событие не отправится
+    // TODO перенести отправку события в сервис
     onSend: [responsePublish(EXCHANGES.CUD_EVENTS, EVENTS.TASK_CREATED)],
   },
   TaskController.createTask
@@ -45,6 +50,7 @@ app.patch(
   {
     preHandler: [auth.authZ],
     // TODO Создавать транзакцию для возможности отмены сохранения если событие не отправится
+    // TODO перенести отправку события в сервис
     onSend: [ responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
   },
   TaskController.assignTask
@@ -54,6 +60,7 @@ app.patch(
   {
     preHandler: [auth.authZ],
     // TODO Создавать транзакцию для возможности отмены сохранения если событие не отправится
+    // TODO перенести отправку события в сервис
     onSend: [responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_COMPLETED)],
   },
   TaskController.completeTask

@@ -52,5 +52,10 @@ export default class AuthService {
   static async signUp(data) {
     data.password = await makeHash(data.password)
     return db.user.create(data)
+      // TODO refactor
+      .then(data => {
+        delete data.dataValues?.password
+        return data
+      })
   }
 }

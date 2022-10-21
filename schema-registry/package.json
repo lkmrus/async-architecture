@@ -1,0 +1,19 @@
+{
+  "name": "schema-registry",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.11.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.19.0",
+    "@babel/node": "^7.13.13",
+    "prettier": "2.7.1"
+  }
+}

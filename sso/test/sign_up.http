@@ -5,6 +5,6 @@ Accept: application/json
 # Login like a email
 {
   "name": "Ruslan",
-  "login": "admin1@test.ru",
+  "login": "admink@test.ru",
   "password": "123456"
 }

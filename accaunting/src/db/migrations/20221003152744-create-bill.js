@@ -1,12 +1,14 @@
-import { UUIDV4, } from 'sequelize'
-
 export const up = async (queryInterface, Sequelize) => {
   await queryInterface.createTable('bills', {
-    bill: {
+    id: {
+      allowNull: false,
       autoIncrement: true,
       primaryKey: true,
+      type: Sequelize.BIGINT,
+    },
+    bill: {
+      unique: true,
       type: Sequelize.UUID,
-      defaultValue: UUIDV4,
     },
     userId: Sequelize.BIGINT,
     balance: Sequelize.FLOAT,

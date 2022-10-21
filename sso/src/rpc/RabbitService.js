@@ -2,6 +2,7 @@ import amqp from 'amqplib'
 import { RABBIT_CONNECTION, } from 'Config/constants'
 import logger from 'Utils/logger'
 import { AppError, } from 'Exceptions'
+const { serialize, deserialize, } = require('SchemaRegistryLib')
 
 let connection = null
 let channel = null
@@ -41,10 +42,10 @@ export const publish = async function (exchangeName, routingKey, object, type = 
     .then(() => {
       // TODO add distributed log recording with transactions
 
-      channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify({
+      channel.publish(exchangeName, routingKey, serialize({
         pattern: routingKey,
-        message: object,
-      })))
+        data: object,
+      }))
     })
 }
 
@@ -67,7 +68,7 @@ export const subscribe = async function (
     ).then(async () => {
       await channel.consume(queue, async function (message) {
         try {
-          await workerFn(JSON.parse(message.content.toString()))
+          await workerFn(deserialize(message)?.content)
           channel.ack(message)
         }
         catch (e) {

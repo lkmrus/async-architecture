@@ -1,5 +1,5 @@
 export const up = async (queryInterface, Sequelize) => {
-  await queryInterface.createTable('task', {
+  await queryInterface.createTable('tasks', {
     id: {
       autoIncrement: true,
       primaryKey: true,
@@ -14,5 +14,5 @@ export const up = async (queryInterface, Sequelize) => {
 }
 
 export const down = async queryInterface => {
-  return queryInterface.dropTable('task')
+  return queryInterface.dropTable('tasks')
 }

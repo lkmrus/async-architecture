@@ -1,0 +1,20 @@
+{
+  "title": "event",
+  "description": "json schema for base event",
+  "type": "object",
+  "$id": "event",
+  "properties": {
+    "eventVersion": {
+      "type": "number"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "pattern": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

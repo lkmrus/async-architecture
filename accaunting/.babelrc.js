@@ -18,7 +18,8 @@ module.exports = {
           'Db': './src/db',
           'Modules': './src/modules',
           'Helpers': './src/common/helpers',
-          'Rpc': './src/common/rpc'
+          'Rpc': './src/common/rpc',
+          'SchemaRegistryLib': '../schema-registry',
         }
       }
     ]

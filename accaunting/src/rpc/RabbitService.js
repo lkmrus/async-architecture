@@ -43,7 +43,7 @@ export const publish = async function (exchangeName, routingKey, object, type = 
 
       channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify({
         pattern: routingKey,
-        message: object,
+        data: object,
       })))
     })
 }

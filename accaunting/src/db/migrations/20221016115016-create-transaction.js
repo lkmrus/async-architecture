@@ -1,5 +1,5 @@
 export const up = async (queryInterface, Sequelize) => {
-  await queryInterface.createTable('money', {
+  await queryInterface.createTable('transactions', {
     id: {
       autoIncrement: true,
       primaryKey: true,
@@ -7,7 +7,7 @@ export const up = async (queryInterface, Sequelize) => {
     },
     taskId: Sequelize.BIGINT,
     bill: Sequelize.UUID,
-    debit: Sequelize.FLOAT,
+    deposit: Sequelize.FLOAT,
     credit: Sequelize.FLOAT,
     date: Sequelize.DATE,
     deletedAt: Sequelize.DATE,
@@ -15,5 +15,5 @@ export const up = async (queryInterface, Sequelize) => {
 }
 
 export const down = async queryInterface => {
-  return queryInterface.dropTable('money')
+  return queryInterface.dropTable('transactions')
 }
