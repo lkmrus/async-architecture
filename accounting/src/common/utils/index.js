@@ -3,7 +3,8 @@ import { authZ,
   isAdmin,
   isManager,
   isAccountant,
-  checkAvailable, } from './auth'
+} from './auth'
+import * as math from './math'
 
 export {
   logger,
@@ -11,5 +12,5 @@ export {
   isAdmin,
   isManager,
   isAccountant,
-  checkAvailable,
+  math,
 }

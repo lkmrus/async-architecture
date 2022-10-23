@@ -1,5 +1,6 @@
 import { subscribe, } from './RabbitService'
 import {
+  addTaskCostWorker,
   createBillWorker,
   depositTransactionWorker,
   sendMailWorker,
@@ -14,8 +15,8 @@ export const EXCHANGES = {
 }
 
 export const EVENTS = {
-  TASK_ASSIGNED: 'bill.assigned',
-  TASK_COST_SET: 'cost.task.set',
+  TASK_ASSIGNED: 'task.assigned',
+  TASK_COST_SET: 'task.cost.set',
   WITHDRAW_APPLIED: 'withdraw.applied',
   DEPOSIT_APPLIED: 'deposit.applied',
   TASK_CREATED: 'task.created',
@@ -49,6 +50,8 @@ async function errorHandler(message, fn) {
 
 const simpleHandler = message => {
   switch (message.pattern) {
+  case EVENTS.TASK_CREATED:
+    return errorHandler(message, addTaskCostWorker)
   case EVENTS.TASK_ASSIGNED:
     return errorHandler(message, withdrawTransactionWorker)
   case EVENTS.USER_REGISTERED:

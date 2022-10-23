@@ -9,6 +9,8 @@ export default (sequelize, dataTypes) => {
       primaryKey: true,
       type: dataTypes.BIGINT,
     },
+    // taskPublicId
+    taskId: dataTypes.STRING,
     bill: dataTypes.UUID,
     deposit: dataTypes.FLOAT,
     credit: dataTypes.FLOAT,

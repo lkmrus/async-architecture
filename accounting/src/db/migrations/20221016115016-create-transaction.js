@@ -5,7 +5,7 @@ export const up = async (queryInterface, Sequelize) => {
       primaryKey: true,
       type: Sequelize.BIGINT,
     },
-    taskId: Sequelize.BIGINT,
+    taskId: Sequelize.STRING,
     bill: Sequelize.UUID,
     deposit: Sequelize.FLOAT,
     credit: Sequelize.FLOAT,
