@@ -4,4 +4,4 @@
 `schemas/[domain]/[be|cud]/[event-name]/[version].json`
 
 ### Setup
-`npm i && npm -g i babel-node`
+`npm i`
