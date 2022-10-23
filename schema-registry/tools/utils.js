@@ -23,7 +23,7 @@ const deserialize = (buffer) => {
   try {
     result = JSON.parse(buffer.toString())
     if (!isObject(result)) {
-      throw new Error()
+      throw new ValidationError('Serialization error')
     }
     return result
   } catch (e) {

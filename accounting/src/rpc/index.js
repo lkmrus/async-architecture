@@ -1,8 +1,12 @@
 import { subscribe, } from './RabbitService'
-import { workerCreateUser, workerTaskShuffle, } from './workers'
-import { logger, } from '../common/utils'
+import {
+  createBillWorker,
+  depositTransactionWorker,
+  sendMailWorker,
+  withdrawTransactionWorker,
+} from './workers'
+import { logger, } from 'Utils'
 import { ATTEMPT, } from 'Config/constants'
-import { AppError, } from 'Exceptions'
 
 export const EXCHANGES = {
   BUSINESS_EVENTS: 'business.events',
@@ -10,11 +14,18 @@ export const EXCHANGES = {
 }
 
 export const EVENTS = {
-  TASK_ASSIGNED: 'task.assigned',
+  TASK_ASSIGNED: 'bill.assigned',
+  TASK_COST_SET: 'cost.task.set',
+  WITHDRAW_APPLIED: 'withdraw.applied',
+  DEPOSIT_APPLIED: 'deposit.applied',
   TASK_CREATED: 'task.created',
   TASK_COMPLETED: 'task.completed',
   TASKS_SHUFFLED: 'tasks.shuffled',
   USER_REGISTERED: 'user.registered',
+  DAILY_MONEY_CALCULATED: 'daily.money.calculated',
+  EMAIL_SENT: 'email.sent',
+  BALANCE_CLEARED: 'balance.cleared',
+  BILL_CREATED: 'bill.created',
 }
 
 export const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -27,7 +38,7 @@ async function errorHandler(message, fn) {
   catch (e) {
     attempt += 1
     if (attempt === ATTEMPT.COUNT) {
-      throw new AppError(e)
+      throw new e
     }
     await delay(ATTEMPT.DELAY_MS)
     logger.error(`Error while handling ${message.pattern} event`, { e, attempt, eventName: message.pattern, })
@@ -39,24 +50,28 @@ async function errorHandler(message, fn) {
 const simpleHandler = message => {
   switch (message.pattern) {
   case EVENTS.TASK_ASSIGNED:
-    return errorHandler(message, workerTaskShuffle)
+    return errorHandler(message, withdrawTransactionWorker)
   case EVENTS.USER_REGISTERED:
-    return errorHandler(message, workerCreateUser)
+    return errorHandler(message, createBillWorker)
+  case EVENTS.TASK_COMPLETED:
+    return errorHandler(message, depositTransactionWorker)
+  case EVENTS.DAILY_MONEY_CALCULATED:
+    return errorHandler(message, sendMailWorker)
   default:
     return
   }
 }
 
+// TODO Доработать создание биндингов
 (async () => {
   // Event subscriptions
-  // TODO Доработать создание биндингов
   await subscribe(
     { exchangeName: EXCHANGES.BUSINESS_EVENTS, type: 'topic', },
     {
-      queue: 'task-tracker', routingKey: '*', options: {
+      queue: 'accounting', routingKey: '*', options: {
         durable: true,
         ['x-dead-letter-exchange']: `${EXCHANGES.BUSINESS_EVENTS}.dlx`,
-        ['x-dead-letter-routing-key']: 'task-tracker', },
+        ['x-dead-letter-routing-key']: 'accounting', },
     },
     simpleHandler,
     { noAck: false, }
@@ -65,10 +80,10 @@ const simpleHandler = message => {
   await subscribe(
     { exchangeName: EXCHANGES.CUD_EVENTS, type: 'topic', },
     {
-      queue: 'task-tracker', routingKey: '*', options: {
+      queue: 'accounting', routingKey: '*', options: {
         durable: true,
         ['x-dead-letter-exchange']: `${EXCHANGES.CUD_EVENTS}.dlx`,
-        ['x-dead-letter-routing-key']: 'task-tracker', },
+        ['x-dead-letter-routing-key']: 'accounting', },
     },
     simpleHandler,
     { noAck: false, }

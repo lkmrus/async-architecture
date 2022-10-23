@@ -5,6 +5,7 @@ export const up = async (queryInterface, Sequelize) => {
       primaryKey: true,
       type: Sequelize.BIGINT,
     },
+    publicId: Sequelize.STRING,
     userId: Sequelize.STRING,
     title: Sequelize.STRING,
     status: Sequelize.STRING,
@@ -19,5 +20,5 @@ export const up = async (queryInterface, Sequelize) => {
 }
 
 export const down = async queryInterface => {
-  return queryInterface.dropTable('tasks')
+  await queryInterface.dropTable('tasks')
 }

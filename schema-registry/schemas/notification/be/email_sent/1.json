@@ -1,3 +1,23 @@
 {
-  "title": "email_sent"
+  "title": "email.sent.v1",
+  "description": "json schema for email sent event (version 1)",
+  "type": "object",
+  "$id": "email.sent",
+  "properties": {
+    "pattern": {
+      "type": "string"
+    },
+    "userId":{
+      "type": "string"
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": ["id"]
+    }
+  }
 }

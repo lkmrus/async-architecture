@@ -2,6 +2,13 @@ const path = require('path')
 const fs = require('fs')
 const Ajv = require('ajv')
 
+const pluckName = (absolutPath) => {
+  if (!absolutPath) {
+    return;
+  }
+  return absolutPath.split('/').pop().split('.')[0]
+}
+
 /**
  *
  * @param folder {string}
@@ -17,10 +24,14 @@ const getFiles = (folder) => {
     if (item.isDirectory()) {
       result = result.concat(getFiles(absoluteFilePath))
     } else {
-      result.push(absoluteFilePath)
+      const index = result.findIndex((path) => path.match(new RegExp(folder)))
+      if (index !== -1 && pluckName(result[index]) < pluckName(item.name)) {
+        result = absoluteFilePath
+      } else {
+        result.push(absoluteFilePath)
+      }
     }
   }
-
   return result
 }
 
@@ -29,6 +40,9 @@ const ajv = new Ajv({ allErrors: true })
 ;(() => {
   const files = getFiles(path.resolve(__dirname, '../schemas'))
   for (const schemaFile of files) {
+    if (!schemaFile) {
+      continue
+    }
     const schema = JSON.parse(fs.readFileSync(schemaFile, 'utf8'))
     try {
       ajv.addSchema(schema)

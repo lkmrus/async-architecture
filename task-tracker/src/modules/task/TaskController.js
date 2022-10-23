@@ -2,6 +2,7 @@ import { isAdmin, isManager, } from 'Utils/auth'
 import { ForbiddenError, } from 'Exceptions'
 import TaskService from './TaskService'
 import { NotFoundError, } from 'Exceptions'
+import { pick, } from 'lodash'
 
 export default class TaskController {
   static async getTasks({ query, user, }) {
@@ -18,7 +19,15 @@ export default class TaskController {
   }
 
   static async createTask({ body, }) {
-    return TaskService.create(body)
+    const query = pick(body, 'userId', 'title', 'status', 'order')
+    const matchTitle = query.title.match(/(\[.*])(.*)/)
+
+    if (matchTitle) {
+      query.title = matchTitle[2]?.trim()
+      query.jiraId = matchTitle[1]?.replace('[', '').replace(']', '').trim()
+    }
+
+    return TaskService.create(query)
   }
 
   static async assignTask({ body, user, }) {

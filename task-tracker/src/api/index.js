@@ -17,13 +17,17 @@ const responsePublish = (exchange, routingKey, additionalData = {}) => {
     if (response?.error) {
       return
     }
-    await publish(exchange, routingKey, {
+    const data = {
       ...additionalData,
-      userId: reply.request?.user?.id,
-      request: reply.request.body,
+      userId: req?.user?.id,
+      taskId: response?.id,
+      publicId: response?.publicId,
+      request: req.body,
       response,
       date: new Date(),
-    })
+    }
+    console.log(data)
+    await publish(exchange, routingKey, data)
   }
 }
 
@@ -51,7 +55,7 @@ app.patch(
     preHandler: [auth.authZ],
     // TODO Создавать транзакцию для возможности отмены сохранения если событие не отправится
     // TODO перенести отправку события в сервис
-    onSend: [ responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
+    onSend: [responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
   },
   TaskController.assignTask
 )

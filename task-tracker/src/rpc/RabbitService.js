@@ -2,7 +2,7 @@ import amqp from 'amqplib'
 import { RABBIT_CONNECTION, } from 'Config/constants'
 import logger from 'Utils/logger'
 import { AppError, } from 'Exceptions'
-import { serialize, } from 'SchemaRegistryLib'
+const { serialize, deserialize, } = require('SchemaRegistryLib')
 
 let connection = null
 let channel = null
@@ -68,7 +68,7 @@ export const subscribe = async function (
     ).then(async () => {
       await channel.consume(queue, async function (message) {
         try {
-          await workerFn(JSON.parse(message.content.toString()))
+          await workerFn(deserialize(message.content))
           channel.ack(message)
         }
         catch (e) {

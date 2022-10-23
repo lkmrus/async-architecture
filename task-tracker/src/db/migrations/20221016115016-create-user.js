@@ -16,5 +16,5 @@ export const up = async (queryInterface, Sequelize) => {
 }
 
 export const down = async queryInterface => {
-  return queryInterface.dropTable('users')
+  await queryInterface.dropTable('users')
 }

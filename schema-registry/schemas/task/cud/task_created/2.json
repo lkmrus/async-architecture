@@ -1,0 +1,47 @@
+{
+  "title": "task.created.v2",
+  "description": "json schema for task created event (version 2)",
+  "type": "object",
+  "$id": "task.created",
+  "properties": {
+    "pattern": {
+      "type": "string"
+    },
+    "userId":{
+      "type": "string"
+    },
+    "taskId":{
+      "type": "string"
+    },
+    "publicId":{
+      "type": "string"
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "publicId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "jiraId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number"
+        }
+      },
+      "required": ["id", "title", "role", "publicId"]
+    }
+  }
+}
