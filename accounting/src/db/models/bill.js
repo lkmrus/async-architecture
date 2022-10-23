@@ -14,9 +14,13 @@ export default (sequelize, dataTypes) => {
       unique: true,
       type: dataTypes.UUID,
       defaultValue: UUIDV4,
+      allowNull: false,
     },
     userId: dataTypes.BIGINT,
-    balance: dataTypes.FLOAT,
+    balance: {
+      type: dataTypes.FLOAT,
+      defaultValue: 0,
+    },
   }, {
     sequelize,
     modelName: 'bill',
