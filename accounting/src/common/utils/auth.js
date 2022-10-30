@@ -2,7 +2,7 @@ import { ROLES, SERVICES, } from 'Config/constants'
 import axios from 'axios'
 import { AppError, AuthError, ForbiddenError, } from 'Exceptions'
 
-export const authZ = async req => {
+export const authN = async req => {
   const url = new URL('auth/check', SERVICES.AUTH_URL).href
   req.user = await axios.get(url, { headers: req.headers, })
     .then(response => response.data)

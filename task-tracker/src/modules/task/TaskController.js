@@ -3,9 +3,9 @@ import { ForbiddenError, } from 'Exceptions'
 import TaskService from './TaskService'
 import { NotFoundError, } from 'Exceptions'
 import { pick, } from 'lodash'
-import { EVENTS, EXCHANGES, } from '../../rpc'
-import { publish, } from '../../rpc/RabbitService'
-import { eventDataBuilder, } from '../../common/utils'
+import { EVENTS, EXCHANGES, } from 'Rpc'
+import { publish, } from 'Rpc/RabbitService'
+import { eventDataBuilder, } from 'Utils'
 
 export default class TaskController {
   static async getTasks({ query, user, }) {

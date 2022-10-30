@@ -23,11 +23,11 @@ const deserialize = (buffer) => {
   try {
     result = JSON.parse(buffer.toString())
     if (!isObject(result)) {
-      throw new ValidationError('Serialization error')
+      throw new ValidationError('Deserialization error')
     }
     return result
   } catch (e) {
-    throw new ValidationError('Serialization error')
+    throw new ValidationError('Deserialization error')
   }
 }
 
@@ -48,7 +48,7 @@ const validateSchema = (schemaName, file) => {
   )
 
   try {
-    validateSchema({ pattern: schemaName, data: json })
+    validate({ pattern: schemaName, data: json })
   } catch (e) {
     console.error(`Error: ${e.message}\n${JSON.stringify(e.meta, null, 2)}`)
 

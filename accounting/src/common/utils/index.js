@@ -1,5 +1,5 @@
 import logger from './logger'
-import { authZ,
+import { authN,
   isAdmin,
   isManager,
   isAccountant,
@@ -8,7 +8,7 @@ import * as math from './math'
 
 export {
   logger,
-  authZ,
+  authN,
   isAdmin,
   isManager,
   isAccountant,

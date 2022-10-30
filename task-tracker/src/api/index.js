@@ -15,25 +15,25 @@ app.register(fastifyCors)
 
 app.get(
   '/tasks',
-  { preHandler: [auth.authZ], },
+  { preHandler: [auth.authN], },
   TaskController.getTasks
 )
 app.post(
   '/tasks',
   {
-    preHandler: [auth.authZ],
+    preHandler: [auth.authN],
   },
   TaskController.createTask
 )
 app.patch(
   '/tasks/assign',
-  { preHandler: [auth.authZ], },
+  { preHandler: [auth.authN], },
   TaskController.assignTask
 )
 app.patch(
   '/tasks/complete',
   {
-    preHandler: [auth.authZ],
+    preHandler: [auth.authN],
   },
   TaskController.completeTask
 )

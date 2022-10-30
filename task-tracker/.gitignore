@@ -7,3 +7,5 @@ dist
 .env
 
 config.*.yml
+
+webpack.config.js

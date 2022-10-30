@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const Ajv = require('ajv')
 
-const pluckName = (absolutPath) => {
+const pluckFileName = (absolutPath) => {
   if (!absolutPath) {
     return;
   }
@@ -25,7 +25,7 @@ const getFiles = (folder) => {
       result = result.concat(getFiles(absoluteFilePath))
     } else {
       const index = result.findIndex((path) => path.match(new RegExp(folder)))
-      if (index !== -1 && pluckName(result[index]) < pluckName(item.name)) {
+      if (index !== -1 && pluckFileName(result[index]) < pluckFileName(item.name)) {
         result = absoluteFilePath
       } else {
         result.push(absoluteFilePath)

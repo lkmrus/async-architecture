@@ -1,40 +1,31 @@
 import { isAccountant, } from 'Utils'
+import AccountingService from 'Modules/accounting/AccountingService'
+
+// TODO
 
 export default class AccountingController {
-  static applyWithdrawTransaction(req) {
-
+  static async calculateAmountEarned({ query, params, }) {
+    await AccountingService.getAmountEarned({ userId: params.id, ...query.filter, })
   }
 
-  static applyDepositTransaction(req) {
-
+  static getStatisticsByDays({ user, params, query, }) {
+    return AccountingService.getAmountEarned({ ...query.filter, }, query.sort, query.limit, query.offset)
   }
 
-  static applyPaymentTransaction(req) {
-
-  }
-
-  static calculateAmountEarned(req) {
-
-  }
-
-  static getStatisticsByDays(req) {
-
-  }
-
-  static calculateAmountDayEarned({ user, params, body, }) {
+  static calculateAmountDayEarned({ user, params, query, }) {
     if (isAccountant(user)) {
-      return
+      return AccountingService.getAmountEarned({ ...query.filter, }, query.sort, query.limit, query.offset)
     }
     else {
-      return
+      return AccountingService.getEarnedByToday({ userId: params.id, ...query.filter, }, query.sort, query.limit, query.offset)
     }
   }
 
   static getAuditLog(req) {
-
+  //  TODO
   }
 
   static getCurrentBalance(req) {
-
+    return AccountingService.getBalance(req.params.userId)
   }
 }

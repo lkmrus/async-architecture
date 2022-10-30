@@ -11,7 +11,7 @@ export const DB = yaml.db
 export const RABBIT_CONNECTION = yaml.rabbitConnectionUrl || 'amqp://localhost:5672'
 export const ATTEMPT = {
   COUNT: yaml.attempt?.count || 3,
-  DELAY_MS: yaml.attempt?.delay || 1000,
+  DELAY_MS: yaml.attempt?.delay || 2000,
 }
 
 export const ROLES = {

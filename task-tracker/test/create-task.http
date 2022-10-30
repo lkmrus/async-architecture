@@ -1,7 +1,7 @@
 POST http://localhost:3101/tasks
 Content-Type: application/json
 Accept: application/json
-Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2NjY1Mjc1MzgsImV4cCI6MTY2NjYxMzkzOH0.kacWwnVBQgy95aHmIH7c5wjhXkETzTTdP3MRkZn9_oA
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2NjcxNjE4OTksImV4cCI6MTY2NzI0ODI5OX0.STFrVjzLOOEFvhGAJAm4LOhCdR6n39-11Tk0_cQpiRY
 
 {
   "userId": "1",

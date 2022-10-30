@@ -8,6 +8,8 @@ import {
 } from './workers'
 import { logger, } from 'Utils'
 import { ATTEMPT, } from 'Config/constants'
+import { ValidationError, } from 'Exceptions'
+import { checkSchema, } from 'SchemaRegistryLib'
 
 export const EXCHANGES = {
   BUSINESS_EVENTS: 'business.events',
@@ -34,22 +36,24 @@ export const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 async function errorHandler(message, fn) {
   let attempt = 0
   try {
-    return fn(message)
+    await fn(message)
+    logger.log(`${message.pattern} event completed successfully`, { e, attempt, eventName: message.pattern, })
   }
   catch (e) {
     attempt += 1
     if (attempt === ATTEMPT.COUNT) {
-      throw new e
+      return
     }
     await delay(ATTEMPT.DELAY_MS)
     logger.error(`Error while handling ${message.pattern} event`, { e, attempt, eventName: message.pattern, })
-    await errorHandler(message, fn)
-    logger.log(`${message.pattern} event completed successfully`, { e, attempt, eventName: message.pattern, })
+    await fn(message)
   }
 }
 
-const simpleHandler = message => {
-  switch (message.pattern) {
+const simpleHandler = (message = {}) => {
+  checkSchema(message?.pattern, message)
+
+  switch (message?.pattern) {
   case EVENTS.TASK_CREATED:
     return errorHandler(message, addTaskCostWorker)
   case EVENTS.TASK_ASSIGNED:
@@ -61,17 +65,24 @@ const simpleHandler = message => {
   case EVENTS.DAILY_MONEY_CALCULATED:
     return errorHandler(message, sendMailWorker)
   default:
-    return
+    throw new ValidationError(`Such a pattern does not exist. Received: ${message?.pattern ?? ''}`)
   }
 }
 
-// TODO Доработать создание биндингов
 (async () => {
   // Event subscriptions
   await subscribe(
     { exchangeName: EXCHANGES.BUSINESS_EVENTS, type: 'topic', },
     {
-      queue: 'accounting', routingKey: '*', options: {
+      queue: 'accounting', routingKeys: [
+        'task.assigned',
+        'task.cost.set',
+        'withdraw.applied',
+        'deposit.applied',
+        'task.completed',
+        'user.registered',
+        'tasks.shuffled'
+      ], options: {
         durable: true,
         ['x-dead-letter-exchange']: `${EXCHANGES.BUSINESS_EVENTS}.dlx`,
         ['x-dead-letter-routing-key']: 'accounting', },
@@ -83,7 +94,16 @@ const simpleHandler = message => {
   await subscribe(
     { exchangeName: EXCHANGES.CUD_EVENTS, type: 'topic', },
     {
-      queue: 'accounting', routingKey: '*', options: {
+      queue: 'accounting', routingKeys: [
+        'task.cost.set',
+        'withdraw.applied',
+        'deposit.applied',
+        'task.created',
+        'daily.money.calculated',
+        'email.sent',
+        'balance.cleared',
+        'bill.created'
+      ], options: {
         durable: true,
         ['x-dead-letter-exchange']: `${EXCHANGES.CUD_EVENTS}.dlx`,
         ['x-dead-letter-routing-key']: 'accounting', },

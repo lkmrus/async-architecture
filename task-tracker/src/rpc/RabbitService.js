@@ -38,43 +38,39 @@ export const publish = async function (exchangeName, routingKey, object, type = 
     throw new AppError('Publisher settings not declared')
   }
   await initChannel()
-    .then(() => channel.assertExchange(exchangeName, type))
-    .then(() => {
-      // TODO add distributed log recording with transactions
+  await channel.assertExchange(exchangeName, type)
+  // TODO add distributed log recording with transactions
 
-      channel.publish(exchangeName, routingKey, serialize({
-        pattern: routingKey,
-        data: object,
-      }))
-    })
+  await channel.publish(exchangeName, routingKey, serialize({
+    pattern: routingKey,
+    data: object,
+  }))
 }
 
 export const subscribe = async function (
   { exchangeName, type, exchangeOptions = { durable: true, }, },
-  { queue , options = {}, routingKey, },
+  { queue , options = {}, routingKeys = [], },
   workerFn,
   consumeOptions = { noAck: false, }
 ) {
   await initChannel()
+  await channel.assertExchange(exchangeName, type)
+  if (options['x-dead-letter-exchange']) {
+    await channel.assertExchange(options['x-dead-letter-exchange'], 'fanout', exchangeOptions)
+  }
+  const qok = await channel.assertQueue(queue, options)
+  routingKeys.map(routingKey => channel.bindQueue(qok.queue, exchangeName, routingKey))
 
-  return channel.assertExchange(exchangeName, type, exchangeOptions)
-    .then(async () => {
-      if (options['x-dead-letter-exchange']) {
-        await channel.assertExchange(options['x-dead-letter-exchange'], 'fanout', exchangeOptions)
-      }
-      return channel.assertQueue(queue, options)
-    })
-    .then(qok => channel.bindQueue(qok.queue, exchangeName, routingKey)
-    ).then(async () => {
-      await channel.consume(queue, async function (message) {
-        try {
-          await workerFn(deserialize(message.content))
-          channel.ack(message)
-        }
-        catch (e) {
-          logger.error(e)
-        }
-      }, consumeOptions)
-      return channel
-    })
+  await channel.consume(queue, async function (message) {
+    try {
+      await workerFn(deserialize(message.content))
+      channel.ack(message)
+    }
+    catch (e) {
+      logger.error(e)
+      throw e
+    }
+  }, consumeOptions)
+
+  return channel
 }

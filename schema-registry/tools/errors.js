@@ -1,7 +1,12 @@
 class SchemaValidationError extends Error {
-  constructor(message) {
+  constructor(message, meta = {}) {
     super(message)
     this.name = 'SchemaValidationError'
+    this.stack = this.stack
+      + Object.entries(meta)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(', ')
+      + '.'
   }
 }
 

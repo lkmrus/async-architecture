@@ -1,8 +1,8 @@
 const Ajv = require('ajv')
 const error = require('./tools/errors.js')
 const userRegisteredSchema = require('./schemas/user/cud/user_registered/1.json') // assert { type: 'json' }
-// const taskCreatedSchema = require('./schemas/task/cud/task_created/1.json')
-const taskCreatedSchemaV2 = require('./schemas/task/cud/task_created/2.json')
+const taskCreatedSchema = require('./schemas/task/cud/task_created/1.json')
+// const taskCreatedSchemaV2 = require('./schemas/task/cud/task_created/2.json')
 const taskAssignedSchema = require('./schemas/task/be/task_assigned/1.json')
 const taskCompletedSchema = require('./schemas/task/be/task_completed/1.json')
 
@@ -10,8 +10,8 @@ const ajv = new Ajv({ allErrors: true })
 
 // TODO Setup of schemas
 ajv.addSchema(userRegisteredSchema)
-// ajv.addSchema(taskCreatedSchema)
-ajv.addSchema(taskCreatedSchemaV2)
+ajv.addSchema(taskCreatedSchema)
+// ajv.addSchema(taskCreatedSchemaV2)
 ajv.addSchema(taskAssignedSchema)
 ajv.addSchema(taskCompletedSchema)
 

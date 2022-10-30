@@ -2,7 +2,8 @@ import { subscribe, } from './RabbitService'
 import { workerCreateUser, workerTaskShuffle, } from './workers'
 import { logger, } from '../common/utils'
 import { ATTEMPT, } from 'Config/constants'
-import { AppError, } from 'Exceptions'
+import { AppError, ValidationError, } from 'Exceptions'
+import { checkSchema, } from 'SchemaRegistryLib'
 
 export const EXCHANGES = {
   BUSINESS_EVENTS: 'business.events',
@@ -30,30 +31,36 @@ async function errorHandler(message, fn) {
       throw new AppError(e)
     }
     await delay(ATTEMPT.DELAY_MS)
-    logger.error(`Error while handling ${message.pattern} event`, { e, attempt, eventName: message.pattern, })
-    await errorHandler(message, fn)
+    logger.error(`Attempt: ${attempt}. Error while handling ${message.pattern} event`, { e, attempt, eventName: message.pattern, })
+    await fn(message)
     logger.log(`${message.pattern} event completed successfully`, { e, attempt, eventName: message.pattern, })
   }
 }
 
-const simpleHandler = message => {
-  switch (message.pattern) {
+const simpleHandler = (message = {}) => {
+  checkSchema(message?.pattern, message)
+
+  switch (message?.pattern) {
   case EVENTS.TASK_ASSIGNED:
     return errorHandler(message, workerTaskShuffle)
   case EVENTS.USER_REGISTERED:
     return errorHandler(message, workerCreateUser)
   default:
-    return
+    throw new ValidationError(`Such a pattern does not exist. Received: ${message?.pattern ?? ''}`)
   }
 }
 
 (async () => {
-  // Event subscriptions
-  // TODO Доработать создание биндингов
   await subscribe(
     { exchangeName: EXCHANGES.BUSINESS_EVENTS, type: 'topic', },
     {
-      queue: 'task-tracker', routingKey: '*', options: {
+      queue: 'task-tracker',
+      routingKeys: [
+        'task.assigned',
+        'task.completed',
+        'user.registered'
+      ],
+      options: {
         durable: true,
         ['x-dead-letter-exchange']: `${EXCHANGES.BUSINESS_EVENTS}.dlx`,
         ['x-dead-letter-routing-key']: 'task-tracker', },
@@ -65,7 +72,9 @@ const simpleHandler = message => {
   await subscribe(
     { exchangeName: EXCHANGES.CUD_EVENTS, type: 'topic', },
     {
-      queue: 'task-tracker', routingKey: '*', options: {
+      queue: 'task-tracker',
+      routingKeys: [],
+      options: {
         durable: true,
         ['x-dead-letter-exchange']: `${EXCHANGES.CUD_EVENTS}.dlx`,
         ['x-dead-letter-routing-key']: 'task-tracker', },
