@@ -17,7 +17,9 @@ module.exports = {
           'Exceptions': './src/common/exceptions',
           'Db': './src/db',
           'Modules': './src/modules',
-          'Helpers': './src/common/helpers'
+          'Helpers': './src/common/helpers',
+          'Rpc': './src/rpc',
+          'SchemaRegistryLib': '../schema-registry',
         }
       }
     ]

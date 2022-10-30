@@ -5,11 +5,13 @@ module.exports = {
     extensions: ['.es6', '.js'],
     alias: {
       'Config': path.resolve(__dirname, './src/config'),
-      'Utils': path.resolve(__dirname, './src/common/utils'),
+      'Utils': path.resolve(__dirname, './src/common/tools'),
       'Exceptions': path.resolve(__dirname, './src/common/exceptions'),
       'Db': path.resolve(__dirname, './src/db'),
       'Modules': path.resolve(__dirname, './src/modules'),
       'Helpers': path.resolve(__dirname, './src/common/helpers'),
+      'Rpc': path.resolve(__dirname, './src/rpc'),
+      'SchemaRegistryLib': path.resolve(__dirname, '../schema-registry'),
     },
   },
 }

@@ -1,4 +1,4 @@
 GET http://localhost:3100/users?limit=1&offset=0
 Content-Type: application/json
 Accept: application/json
-Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1OTIxMjQ0LCJleHAiOjE2NjYwMDc2NDR9.eLQLZgpDxVHDDxasosUlatoI1YMAJeETMVDnyinQjUM
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2NjYzNzU2NzEsImV4cCI6MTY2NjQ2MjA3MX0.xa9eEAIj0Twsf9WLTZTGHdPtLeiz0obtyDI9rmU_L74

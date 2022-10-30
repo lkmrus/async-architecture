@@ -1,0 +1,44 @@
+{
+  "title": "task.completed.v1",
+  "description": "json schema for task completed event (version 1)",
+  "type": "object",
+  "$id": "task.completed",
+  "properties": {
+    "userId":{
+      "type": "string"
+    },
+    "taskId":{
+      "type": "string"
+    },
+    "publicId":{
+      "type": "string"
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "publicId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "jiraId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number"
+        }
+      },
+      "required": ["id", "userId", "status", "publicId"]
+    }
+  }
+}

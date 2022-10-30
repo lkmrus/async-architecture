@@ -10,10 +10,10 @@ export default class TaskService {
     return db.task.findByPk(id)
   }
 
-  static async create({ userId, title, status = 'TODO', order= null, }) {
+  static async create({ userId, title, jiraId = null, status= 'TODO', order, }) {
     const tasks = await this.findList({ userId, }, [['userId', 'DESC']])
     const ordering = !order ? tasks.length ? tasks[0].order + 1 : 1 : order
-    return db.task.create({ userId, title, status, order: ordering, })
+    return db.task.create({ userId, title, jiraId, status, order: ordering, })
   }
 
   static async assignTask({ taskId, userId, }) {

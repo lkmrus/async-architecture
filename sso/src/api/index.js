@@ -15,15 +15,19 @@ if (constants.NODE_ENV !== 'production') {
 
 const responsePublish = (exchange, routingKey, additionalData = {}) => {
   return async (_req, reply, payload) => {
-    const userId = !reply.request.user ? JSON.parse(payload)?.id : reply.request.user?.id
-    const publicId = !reply.request.user ? JSON.parse(payload)?.publicId : reply.request.user?.publicId
+    const response = JSON.parse(payload)
+    if (response?.error) {
+      return
+    }
 
+    const userId = !reply.request.user ? response?.id : reply.request.user?.id
+    const publicId = !reply.request.user ? response?.publicId : reply.request.user?.publicId
     await publish(exchange, routingKey, {
       ...additionalData,
       userId,
       publicId,
-      request: reply.request.body,
-      response: JSON.parse(payload),
+      request: reply.request?.body,
+      response,
       date: new Date(),
     })
   }
@@ -35,14 +39,22 @@ app.register(fastifyCors)
 app.get('/users',
   { preHandler: [AuthController.getContext, AuthController.checkAdminRole], },
   UserController.getUsers)
-app.post('/users/change_password', { preHandler: [AuthController.getContext], }, UserController.changePassword)
-app.post('/users/change_profile/:id', { onResponse: [], }, UserController.changeProfile)
+app.post('/users/change_password', {
+  preHandler: [AuthController.getContext],
+  // TODO перенести отправку события в сервис
+  onSend: [responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.PASSWORD_CHANGED)],
+}, UserController.changePassword)
+app.post('/users/change_profile/:id', UserController.changeProfile)
 
-app.post('/roles/assign_role/:id', { preHandler: [AuthController.getContext, AuthController.checkAdminRole], }, RoleController.assignRole)
+app.post('/roles/assign_role/:id', {
+  preHandler: [AuthController.getContext,
+    AuthController.checkAdminRole],
+}, RoleController.assignRole)
 
 app.get('/auth/check', { preHandler: [AuthController.getContext], }, AuthController.checkUser)
 app.post('/auth/sign_in', AuthController.signIn)
 app.post('/auth/sign_up',{
+  // TODO перенести отправку события в сервис
   onSend: [responsePublish(EXCHANGES.CUD_EVENTS, EVENTS.USER_REGISTERED)],
 }, AuthController.signUp)
 

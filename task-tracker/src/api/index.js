@@ -3,24 +3,11 @@ import fastifyCors from 'fastify-cors'
 import { auth, logger, } from 'Utils'
 import { constants, } from 'Config'
 import TaskController from 'Modules/task/TaskController'
-import { publish, } from '../rpc/RabbitService'
-import { EVENTS, EXCHANGES, } from '../rpc'
+import '../rpc'
 
 const fastifyOptions = {}
 if (constants.NODE_ENV !== 'production') {
   fastifyOptions.logger = logger
-}
-
-const responsePublish = (exchange, routingKey, additionalData = {}) => {
-  return async (req, reply, payload) => {
-    await publish(exchange, routingKey, {
-      ...additionalData,
-      userId: reply.request?.user?.id,
-      request: reply.request.body,
-      response: JSON.parse(payload),
-      date: new Date(),
-    })
-  }
 }
 
 const app = Fastify(fastifyOptions)
@@ -28,30 +15,25 @@ app.register(fastifyCors)
 
 app.get(
   '/tasks',
-  { preHandler: [auth.authZ], },
+  { preHandler: [auth.authN], },
   TaskController.getTasks
 )
 app.post(
   '/tasks',
   {
-    preHandler: [auth.authZ],
-    onSend: [responsePublish(EXCHANGES.CUD_EVENTS, EVENTS.TASK_CREATED)],
+    preHandler: [auth.authN],
   },
   TaskController.createTask
 )
 app.patch(
   '/tasks/assign',
-  {
-    preHandler: [auth.authZ],
-    onSend: [ responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_ASSIGNED)],
-  },
+  { preHandler: [auth.authN], },
   TaskController.assignTask
 )
 app.patch(
   '/tasks/complete',
   {
-    preHandler: [auth.authZ],
-    onSend: [responsePublish(EXCHANGES.BUSINESS_EVENTS, EVENTS.TASK_COMPLETED)],
+    preHandler: [auth.authN],
   },
   TaskController.completeTask
 )

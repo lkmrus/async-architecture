@@ -3,15 +3,11 @@ import { publish, } from './RabbitService'
 import { EVENTS, EXCHANGES, } from './index'
 import UserService from 'Modules/user/UserService'
 
-export const workerTaskShuffle = async data => {
-  if (data.message?.response?.id) {
-    const tasks = await TaskService.shuffleTasks(data.message.response.id)
-    await publish(EXCHANGES.CUD_EVENTS, EVENTS.TASKS_SHUFFLED, { tasks, ownerId: data.message.userId, }, 'topic')
-  }
+export const workerTaskShuffle = async msg => {
+  const tasks = await TaskService.shuffleTasks(msg.data.response.id)
+  await publish(EXCHANGES.CUD_EVENTS, EVENTS.TASKS_SHUFFLED, { tasks, ownerId: msg.data.userId, }, 'topic')
 }
 
-export const workerCreateUser = async data => {
-  if (data.message) {
-    await UserService.create(data.message.userId, data.message.publicId)
-  }
+export const workerCreateUser = async msg => {
+  await UserService.create(msg.data.userId, msg.data.publicId)
 }

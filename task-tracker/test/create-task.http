@@ -1,9 +1,9 @@
 POST http://localhost:3101/tasks
 Content-Type: application/json
 Accept: application/json
-Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2NjU4NzYyODYsImV4cCI6MTY2NzE3MjI4Nn0.bE0qzSLqP30tYY6XWxjwXxisapOcHAVWV9GgXB3BHFU
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2NjcxNjE4OTksImV4cCI6MTY2NzI0ODI5OX0.STFrVjzLOOEFvhGAJAm4LOhCdR6n39-11Tk0_cQpiRY
 
 {
-  "userId": "24",
-  "title": "Отправить отчетность в налоговую"
+  "userId": "1",
+  "title": "[OG-1] Отправить отчетность в налоговую"
 }

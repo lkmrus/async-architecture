@@ -6,3 +6,5 @@
 ## Services
 - [SSO](./sso/README.md "more here")
 - [Task Tracker](./task-tracker/README.md "more here")
+- [Accounting](./accounting/README.md "more here")
+- [Event Schema Registry Library](./schema-registry/README.md "more here")

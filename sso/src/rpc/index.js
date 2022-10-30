@@ -6,4 +6,5 @@ export const EXCHANGES = {
 export const EVENTS = {
   USER_REGISTERED: 'user.registered',
   USER_LOGIN: 'user.login',
+  PASSWORD_CHANGED: 'user.password.changed',
 }

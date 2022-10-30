@@ -14,3 +14,7 @@ services:
   authUrl: 0.0.0.0:3100
 
 rabbitConnectionUrl: 'amqp://localhost'
+eventHandlingAttempt: 3
+attempt:
+  count: 3
+  delay: 1000
